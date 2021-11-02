@@ -58,39 +58,44 @@ void setup() {
 
 void loop() {
 
-switchStateR = digitalRead(KNOP_ROOD);
+switchStateR = digitalRead(KNOP_ROOD); 
 switchStateY = digitalRead(KNOP_GEEL);
 switchStateB = digitalRead(KNOP_BLAUW);
 switchStateG = digitalRead(KNOP_GROEN);
 
+Serial.println(switchStateR);
+Serial.println(switchStateY);
+Serial.println(switchStateB);
+Serial.println(switchStateG);
+
 
 //Rode knop wordt ingedrukt
 if (switchStateR == HIGH){
-  tone(LED_ROOD, TOON_ROOD);
+  tone(BUZZER, TOON_ROOD);
 }
 else{
-  noTone(LED_ROOD);
+  noTone(BUZZER);
 }
 //Blauwe knop wordt ingedrukt
 if (switchStateB == HIGH){
-  tone(LED_BLAUW, TOON_BLAUW);
+  tone(BUZZER, TOON_BLAUW);
 }
 else{
-  noTone(LED_BLAUW);
+  noTone(BUZZER);
 }
 //Gele knop wordt ingedrukt
 if (switchStateY == HIGH){
-  tone(LED_GEEL, TOON_GEEL);
+  tone(BUZZER, TOON_GEEL);
 }
 else{
-  noTone(LED_GEEL);
+  noTone(BUZZER);
 }
 //Groene knop wordt ingedrukt
 if (switchStateG == HIGH){
-  tone(LED_GROEN, TOON_GROEN);
+  tone(BUZZER, TOON_GROEN);
 }
 else{
-  noTone(LED_GROEN);
+  noTone(BUZZER);
 }
 
 /*switchState = digitalRead(KNOP_BLAUW);

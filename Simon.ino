@@ -20,6 +20,12 @@
 //Buzzer definitie
 #define BUZZER 1
 
+//Staat drukknop
+int switchState = 0;
+
+//snelheid van een knipper
+#define snelheid 250
+
 
 
 
@@ -38,11 +44,72 @@ void setup() {
 
   //Buzzer
   pinMode(BUZZER, OUTPUT);
+
+  digitalWrite(LED_ROOD, LOW);
+  digitalWrite(LED_GROEN, LOW);
+  digitalWrite(LED_GEEL, LOW);
+  digitalWrite(LED_BLAUW, LOW);
   
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
+switchState = digitalRead(KNOP_BLAUW);
+
+if (switchState == HIGH){
+  digitalWrite(LED_BLAUW, HIGH);
+}
+else{
+  digitalWrite(LED_BLAUW, LOW);
+}
+}
+
+
+void wrong_order(){
+
+ //Als een verkeerde code is ingevuld zullen alle LEDs eerst aan en dan uit gaan.
+ //Dit gebeurt 3x
+  for(int i = 0; i < 3; i++)
+  {
+  digitalWrite(LED_ROOD, HIGH);
+  digitalWrite(LED_BLAUW, HIGH);
+  digitalWrite(LED_GEEL, HIGH);
+  digitalWrite(LED_GROEN, HIGH);
+  delay(snelheid);
+
+
+  digitalWrite(LED_ROOD, LOW);
+  digitalWrite(LED_BLAUW, LOW);
+  digitalWrite(LED_GEEL, LOW);
+  digitalWrite(LED_GROEN, LOW);
+  delay(snelheid);
+  }
+   
+}
+
+void right_order()
+{
+
+  for(int i = 0; i < 3; i++)
+  {
+    
+  
+  digitalWrite(LED_ROOD, HIGH);
+  digitalWrite(LED_BLAUW, LOW);
+  digitalWrite(LED_GEEL, HIGH);
+  digitalWrite(LED_GROEN, LOW);
+  delay(500);
+
+
+  digitalWrite(LED_ROOD, LOW);
+  digitalWrite(LED_BLAUW, HIGH);
+  digitalWrite(LED_GEEL, LOW);
+  digitalWrite(LED_GROEN, HIGH);
+  delay(500);
+  }
+
+
+
+  
 }

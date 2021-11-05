@@ -27,8 +27,8 @@ const ButtonLed BUTTON_LEDS[4] = {
   {KNOP_ROOD, LED_ROOD, 600},
   {KNOP_GEEL, LED_GEEL, 400},
 };
-int code[12];
-int codeLength = 0;
+int max_level[100];
+int level = 0;
 int n;
 
 void setup() {
@@ -51,16 +51,16 @@ void setup() {
 }
 
 
-void soundBuzzer(unsigned int frequency, unsigned int duration, int wait) {
-  tone(BUZZER, frequency, duration);
-  if (wait) {
+void soundBuzzer(unsigned int frequentie, unsigned int duur, int wait) {
+  tone(BUZZER, frequentie, duur);
+
     delay(100);
-  }
+ 
 }
 
-void showLed(unsigned int pin, unsigned int duration) {
+void showLed(unsigned int pin, unsigned int duur) {
   digitalWrite(pin,  HIGH);
-  delay(duration);
+  delay(duur);
   digitalWrite(pin, LOW);
 }
 
@@ -75,62 +75,62 @@ int buttonPressed() {
 }
 
 void show_order() {
-  for (int i = 0; i < codeLength; i++) {
-    ButtonLed bl = BUTTON_LEDS[code[i]];
-    soundBuzzer(bl.buzzerHoogte, 250, FALSE);
-    showLed(bl.LED, 550);
+  for (int i = 0; i < level; i++) {
+    ButtonLed buttonled = BUTTON_LEDS[max_level[i]];
+    soundBuzzer(buttonled.buzzerHoogte, 250, FALSE);
+    showLed(buttonled.LED, 550);
     delay(100);
   }
 }
 
-void generateNextNumber() {
+void makeNewNumber() {
   // Generate next number which is not equal to the previous 2 numbers when they are the same
   do {
-    code[codeLength] = random() % 4;
-  } while (codeLength > 1 && code[codeLength] == code[codeLength - 1] && code[codeLength] == code[codeLength - 2]);
-  codeLength++;
+    max_level[level] = random() % 4;
+  } while (level > 1 && max_level[level] == max_level[level - 1] && max_level[level] == max_level[level - 2]);
+  level++;
   show_order();
   n = 0;
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // put your main max_level here, to run repeatedly:
   int pressed = buttonPressed();
   if (pressed >= 0) {
-    if (codeLength == 0) {
+    if (level == 0) {
       // Start new game
-      generateNextNumber();
+      makeNewNumber();
     } else {
-      ButtonLed bl = BUTTON_LEDS[pressed];
-      soundBuzzer(bl.buzzerHoogte, 300, FALSE);
-      showLed(bl.LED, 300);
+      ButtonLed buttonled = BUTTON_LEDS[pressed];
+      soundBuzzer(buttonled.buzzerHoogte, 300, FALSE);
+      showLed(buttonled.LED, 300);
 
-      if (code[n] == pressed) {
-        // Guessed code digit correctly
-        if (n == codeLength - 1) {
-          // Guessed whole code correctly
-          if (codeLength == 12) {
-            // Maximum code length reached
+      if (max_level[n] == pressed) {
+        // Guessed max_level digit correctly
+        if (n == level - 1) {
+          // Guessed whole max_level correctly
+          if (level == 12) {
+            // Maximum max_level length reached
             //playMegalovania();
-            codeLength = 0;
+            level = 0;
           } else {
-            // Increase code length
+            // Increase max_level length
             for (int i = 800; i <= 1200; i = i + 100) {
               soundBuzzer (i, 100, TRUE);
             }
             delay(500);
-            generateNextNumber();
+            makeNewNumber();
           }
         } else {
-          // Advance to next code digit to guess
+          // Advance to next max_level digit to guess
           n++;
         }
       } else {
-        // Guessed code digit incorrectly
-        for (int i = 1600; i >= 800; i = i - 100) {
+        // Guessed max_level digit incorrectly
+        for (int i = 2000; i >= 650; i = i - 100) {
           soundBuzzer (i, 100, TRUE);
         }
-        codeLength = 0;
+        level = 0;
       }
     }
   }

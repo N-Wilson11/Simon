@@ -1,31 +1,29 @@
 #define FALSE 0
 #define TRUE 1
 
-// Safe to Arduino pin mapping
+// pin led
 #define LED_BLAUW 2
 #define LED_GROEN 9
 #define LED_ROOD 4
 #define LED_GEEL 7
 
-#define PIN_BTN_LOW 8
+//knoppen
 #define KNOP_BLAUW 3
 #define KNOP_GROEN 11
 #define KNOP_ROOD 5
 #define KNOP_GEEL 13
-
+//buzzer
 #define BUZZER A0
 
-typedef struct {
+typedef struct 
+{
   int knop;
   int LED;
   int buzzerHoogte;
 } ButtonLed;
 
 const ButtonLed BUTTON_LEDS[4] = {
-  {KNOP_BLAUW, LED_BLAUW, 1000},
-  {KNOP_GROEN, LED_GROEN, 800},
-  {KNOP_ROOD, LED_ROOD, 600},
-  {KNOP_GEEL, LED_GEEL, 400},
+  {KNOP_BLAUW, LED_BLAUW, 1000},{KNOP_GROEN, LED_GROEN, 800},{KNOP_ROOD, LED_ROOD, 600},{KNOP_GEEL, LED_GEEL, 400},
 };
 int max_level[200];
 int level = 0;
@@ -43,10 +41,9 @@ void setup() {
   pinMode(KNOP_ROOD, INPUT_PULLUP);
   pinMode(KNOP_GEEL, INPUT_PULLUP);
 
-  pinMode(PIN_BTN_LOW, OUTPUT);
-  digitalWrite(PIN_BTN_LOW, LOW);
+  
 
-  // Initialize random number generator
+  // Maak een random getal
   randomSeed(analogRead(0));
 }
 
@@ -57,6 +54,7 @@ void soundBuzzer(unsigned int frequentie, unsigned int duur, int wait) {
     delay(100);
  
 }
+
 
 void showLed(unsigned int pin, unsigned int duur) {
   digitalWrite(pin,  HIGH);
@@ -84,7 +82,7 @@ void show_order() {
 }
 
 void makeNewNumber() {
-  // Generate next number which is not equal to the previous 2 numbers when they are the same
+  // Maak een nieuw nummer die niet gelijk is aan de vorige Led
   do {
     max_level[level] = random(0,4);
   } while (level > 1 && max_level[level] == max_level[level - 1] /*&& max_level[level] == max_level[level - 2]*/);
@@ -94,7 +92,7 @@ void makeNewNumber() {
 }
 
 void loop() {
-  // put your main max_level here, to run repeatedly:
+ 
   int pressed = buttonPressed();
   if (pressed >= 0) {
     if (level == 0) {
@@ -106,15 +104,15 @@ void loop() {
       showLed(buttonled.LED, 300);
 
       if (max_level[n] == pressed) {
-        // Guessed max_level digit correctly
+        // max level knop goed geraden
         if (n == level - 1) {
-          // Guessed whole max_level correctly
+          //level goedgedaan
           if (level == 100) {
-            // Maximum max_level length reached
-            //playMegalovania();
+            // spel uitgespeeld
+       
             level = 0;
           } else {
-            // Increase max_level length
+            // buzzer toon goed
             for (int i = 800; i <= 1200; i = i + 100) {
               soundBuzzer (i, 100, TRUE);
             }
@@ -122,7 +120,7 @@ void loop() {
             makeNewNumber();
           }
         } else {
-          // Advance to next max_level digit to guess
+          // ga naar volgende getal om te raden
           n++;
         }
       } else {
